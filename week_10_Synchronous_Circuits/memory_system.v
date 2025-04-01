@@ -60,7 +60,7 @@ module memory_system(
         .C(store_vec[2]),
         .D(store_vec[3]),
         .sel(addr),
-        .enable(1),
+        .Enable(1),
         .Y(memory)
     );
             
