@@ -1,25 +1,4 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 03/25/2025 10:48:33 AM
-// Design Name: 
-// Module Name: demultiplexer
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-module demultiplexer(
+module demultiplexer8bit(
     input [7:0] data,
     input [1:0] sel,
     output reg [7:0] A,
@@ -30,10 +9,30 @@ module demultiplexer(
 
     always @(*) begin 
         case(sel)
-            2'b00: {D, C, B, A} <= {8'b0, 8'b0, 8'b0, data}; 
-            2'b01: {D, C, B, A} <= {8'b0, 8'b0, data, 8'b0}; 
-            2'b10: {D, C, B, A} <= {8'b0, data, 8'b0, 8'b0}; 
-            2'b11: {D, C, B, A} <= {data, 8'b0, 8'b0, 8'b0}; 
+            2'b00: {D, C, B, A} <= {4'b0, 4'b0, 4'b0, data}; 
+            2'b01: {D, C, B, A} <= {4'b0, 4'b0, data, 4'b0}; 
+            2'b10: {D, C, B, A} <= {4'b0, data, 4'b0, 4'b0}; 
+            2'b11: {D, C, B, A} <= {data, 4'b0, 4'b0, 4'b0}; 
+            
+        endcase
+    end
+endmodule
+
+module demultiplexer1bit(
+    input data,
+    input [1:0] sel,
+    output reg A,
+    output reg B,
+    output reg C,
+    output reg D
+);
+
+    always @(*) begin 
+        case(sel)
+            2'b00: {D, C, B, A} <= {0, 0, 0, data}; 
+            2'b01: {D, C, B, A} <= {0, 0, data, 0}; 
+            2'b10: {D, C, B, A} <= {0, data, 0, 0}; 
+            2'b11: {D, C, B, A} <= {data, 0, 0, 0}; 
             
         endcase
     end
