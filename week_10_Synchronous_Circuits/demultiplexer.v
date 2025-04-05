@@ -9,10 +9,10 @@ module demultiplexer8bit(
 
     always @(*) begin 
         case(sel)
-            2'b00: {D, C, B, A} <= {4'b0, 4'b0, 4'b0, data}; 
-            2'b01: {D, C, B, A} <= {4'b0, 4'b0, data, 4'b0}; 
-            2'b10: {D, C, B, A} <= {4'b0, data, 4'b0, 4'b0}; 
-            2'b11: {D, C, B, A} <= {data, 4'b0, 4'b0, 4'b0}; 
+            2'b00: {D, C, B, A} <= {8'b0, 8'b0, 8'b0, data}; 
+            2'b01: {D, C, B, A} <= {8'b0, 8'b0, data, 8'b0}; 
+            2'b10: {D, C, B, A} <= {8'b0, data, 8'b0, 8'b0}; 
+            2'b11: {D, C, B, A} <= {data, 8'b0, 8'b0, 8'b0}; 
             
         endcase
     end
@@ -29,10 +29,10 @@ module demultiplexer1bit(
 
     always @(*) begin 
         case(sel)
-            2'b00: {D, C, B, A} <= {0, 0, 0, data}; 
-            2'b01: {D, C, B, A} <= {0, 0, data, 0}; 
-            2'b10: {D, C, B, A} <= {0, data, 0, 0}; 
-            2'b11: {D, C, B, A} <= {data, 0, 0, 0}; 
+            2'b00: {D, C, B, A} <= {1'b0, 1'b0, 1'b0, data}; 
+            2'b01: {D, C, B, A} <= {1'b0, 1'b0, data, 1'b0}; 
+            2'b10: {D, C, B, A} <= {1'b0, data, 1'b0, 1'b0}; 
+            2'b11: {D, C, B, A} <= {data, 1'b0, 1'b0, 1'b0}; 
             
         endcase
     end

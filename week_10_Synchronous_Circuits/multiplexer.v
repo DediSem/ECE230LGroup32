@@ -5,8 +5,8 @@ module multiplexer(
     output [7:0] Y
 );
 
-   assign Y = Enable ? 
+   assign Y = Enable ? (
    sel == 2'b00 ? A:
    sel == 2'b01 ? B :
-   sel == 2'b10 ? C : D;
+   sel == 2'b10 ? C : D) : 8'b00000000;
 endmodule

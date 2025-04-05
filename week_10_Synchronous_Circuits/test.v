@@ -1,58 +1,131 @@
 `timescale 1ns/1ps
 
 module test();
-    wire [15:0] led;
+   
+
+
+
+    reg D, E;
+    reg [7:0] data;
+    reg [1:0] addr;
     reg [15:0] sw;
-    reg btnl, btnu, btnd, btnr, btnc;
+    wire [15:0] led;
+    wire Q, NotQ;
+    wire [7:0] memory;
 
     top uut(
-        .led(led),
         .sw(sw),
-        .btnL(btnl),
-        .btnU(btnu),
-        .btnD(btnd),
-        .btnR(btnr),
-        .btnC(btnc)
+        .btnC(E),
+        .led(led)
     );
 
-    reg [4:0] i;
     
-    wire [1:0] mult_sel;
-    wire [1:0] demult_sel;
-    
-    wire [3:0] current_mult;
-    wire [3:0] current_demult;
-    
-    assign mult_sel = {btnu, btnl};
-    assign demult_sel = {btnr, btnd};
-    
-    assign current_mult = (sw >> (4 * mult_sel)) & 'hF;
-    assign current_demult = (led >> (4 * demult_sel)) & 'hF;
+assign Q = led[0];
+assign NotQ = led[1];
+assign memory = led[15:8];
 
-    initial begin
-        $dumpvars(0, test);
-        sw = 'b0110_1010_0101_1001;
-        btnl = 0;
-        btnu = 0;
-        btnd = 0;
-        btnr = 0;
-        btnc = 0;
-        #10;
-        btnc = 1;
-        for (i = 0; i < 16; i = i + 1) begin
-            #10;
-            btnl = i[0];
-            btnu = i[1];
-            btnd = i[2];
-            btnr = i[3];
-            
-            if (current_mult != current_demult) begin
-                // If your simulation stops here
-                // then your design fails the test!
-                $display("Failed test!");
-                $finish;
-            end
-        end
-        #10 $finish;
+always @(*) begin
+    sw <= {data, addr, 5'b0, D};
+end
+
+initial begin
+    $dumpvars(0,test);
+    data = 0;
+    addr = 0;
+    D = 0;
+    E = 0;
+    #1;
+    E = 1;
+    #1;
+    E = 0;
+    #1;
+    if (Q || ~NotQ) begin
+        $display("FAILED test. We should be in the unset state");
+        $finish;
     end
+    #1;
+    D = 1;
+    #1;
+    if (Q || ~NotQ) begin
+        $display("FAILED test. We should be in the unset state");
+        $finish;
+    end
+    #1;
+    E = 1;
+    #1;
+    E = 0;
+    #1;
+    if (~Q || NotQ) begin
+        $display("FAILED test. We should be in the set state");
+        $finish;
+    end
+    #1;
+    D = 0;
+    #1;
+    if (~Q || NotQ) begin
+        $display("FAILED test. We should be in the set state");
+        $finish;
+    end
+    #1;
+    data = 'b00000011;
+    addr = 0;
+    #1;
+    E = 1;
+    #1;
+    E = 0;
+    #1;
+    data = 'b00001100;
+    addr = 1;
+    #1;
+    E = 1;
+    #1;
+    E = 0;
+    #1;
+    data = 'b00110000;
+    addr = 2;
+    #1;
+    E = 1;
+    #1;
+    E = 0;
+    #1;
+    data = 'b11000000;
+    addr = 3;
+    #1;
+    E = 1;
+    #1;
+    E = 0;
+    #1;
+    data = 0;
+    addr = 0;
+    #1;
+    if (memory != 'b00000011) begin
+        $display("FAILED test. Should retain previous value");
+        $finish;
+    end
+    #1;
+    addr = 1;
+    #1;
+    if (memory != 'b00001100) begin
+        $display("FAILED test. Should retain previous value");
+        $finish;
+    end
+    #1;
+    addr = 2;
+    #1;
+    if (memory != 'b00110000) begin
+        $display("FAILED test. Should retain previous value");
+        $finish;
+    end
+    #1;
+    addr = 3;
+    #1;
+    if (memory != 'b11000000) begin
+        $display("FAILED test. Should retain previous value");
+        $finish;
+    end
+    #1;
+    $display("PASSED test");
+    $finish;
+end
+
 endmodule
