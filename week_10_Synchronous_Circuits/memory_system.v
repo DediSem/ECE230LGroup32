@@ -46,7 +46,7 @@ module memory_system(
         .C(mem_vec[2]),
         .D(mem_vec[3]),
         .sel(addr),
-        .Enable(1'b0),
+        .Enable(1'b1),
         .Y(memory)
     );
             
